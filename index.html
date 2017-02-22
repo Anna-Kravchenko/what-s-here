@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>What's here</title>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" type="image/png" href="images/icons/favicon.png">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="scripts/jquery-3.1.1.min.js"></script>
+		
+ 		<!-- <script src="https://www.googleapis.com/youtube/v3/search"></script>  -->
+		
+		<script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmU5hYWv7rBrKgpt7murOG75W0H1cS7Og&callback=initMap&region=UA&language=ru&libraries=places"></script>
+		
+		<script type="text/javascript" src="scripts/script.js"></script>
+		
+		<script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
+	</head>
+	<body onload="initMap()">
+		<div class="container">
+			<div class="container__header">
+				<header class="header">
+					<div class="container__block">
+						<div class="header__logo">
+							<div class="logo">
+								<a class="logo__link" href="#">
+									<img src="images/icons/logo.png" alt="">
+								</a>
+							</div>
+						</div>
+						<div class="header__info">
+							<div class="info">
+								<div class="info__title">what's here</div>
+								<div class="info__search"></div>
+								<div class="info__socials">
+									<ul class="socials">
+										<li class="socials__item">
+											<a class="socials__link socials__link_bg_fb" href="#"></a>
+										</li>
+										<li class="socials__item">
+											<a class="socials__link socials__link_bg_tw" href="#"></a>
+										</li>
+										<li class="socials__item">
+											<a class="socials__link socials__link_bg_in" href="#"></a>
+										</li>
+									</ul>
+								</div>
+								
+
+							</div>
+						</div>
+					</div>
+				</header>
+			</div>
+			
+			<div class="container__layout container__block container__block_bg_white">
+				<main class="layout">
+					<div class="layout__col">
+						<div class="layout__block">
+							<section class="mapblock">
+								<div class="mapWrapper">
+									<div id="mapWrap">
+									<div id="map"></div>
+									</div>
+									<!-- <input id="submit" value="search" type="button"/> -->
+								</div>
+							</section>
+						</div>
+					</div>
+					<div class="layout__col layout__col_second">
+						<div class="layout__block">
+							<section class="searchblock">
+								<div id="searchQuery"></div> 
+								<div class="searchResult">
+									<div class="searchResult__video">
+										<pre id="response"></pre>
+										<div id="search">
+											<div class="pagination">
+												<button type="button" id="prevPageButton" class="page__button" onclick="previousPage();"><</button>
+												<button type="button" id="nextPageButton" class="page__button" onclick="nextPage();">></button></button>
+											</div>
+										</div>
+										<div class="searchResult__video_player">
+											<div id="overlay"></div>
+											<div id="videoContainer">
+												<iframe id="videoPlayer"  width="420" height="345"
+												src="">
+												</iframe>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>
