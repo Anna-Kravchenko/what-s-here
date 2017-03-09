@@ -2,6 +2,8 @@ var map, currentLatLng, marker;
 var timerMap, isAnimationInProgress = false;
 var geocoder;
 var address = "";
+var request;
+/* var googleSearchString = ""; */
 
 function initMap() {
 	var defaultLatLng = {
@@ -29,6 +31,18 @@ function initMap() {
 			map.setCenter(currentLatLng);
 		});
 	}
+	
+	
+		
+	request = {
+		location: currentLatLng,
+		radius: '10'
+		/* types: ['store'] */
+		};
+
+	service = new google.maps.places.PlacesService(map);
+	
+	
 	map.addListener('click', function(e) {
 		currentLatLng.lat = e.latLng.lat();
 		currentLatLng.lng = e.latLng.lng();
@@ -36,11 +50,30 @@ function initMap() {
 		placeMarkerAndPanTo(e.latLng, map);
 		
 		geocodeLatLng(geocoder, map);
+		request.location = currentLatLng;
+		service.nearbySearch(request, callback);
 		//map.setCenter(marker.getPosition());
 		});
 	
 	map.addListener('mouseover', expandMap);
 	map.addListener('mouseout', collapseMap);
+	
+
+}
+
+function callback(results, status) {
+	if (status == google.maps.places.PlacesServiceStatus.OK) {
+		for (var i = 0; i < results.length; i++) {
+			var place = results[i];
+			/* createMarker(results[i]); */
+			//console.log("places      ",results[i]);
+			if(results[i].types.indexOf("point_of_interest")!=-1){
+				console.log(results[i].name, i);
+				address += " \"" + results[i].name + "\"";
+				return;
+			}
+		}
+	}
 }
 
 function placeMarkerAndPanTo(latLng, map) {
@@ -65,15 +98,25 @@ function placeMarkerAndPanTo(latLng, map) {
 			console.log(currentLatLng.lat, currentLatLng.lng);
 			geocodeLatLng(geocoder, map);
 			map.setCenter(marker.getPosition());
+			request.location = currentLatLng;
+			service.nearbySearch(request, callback);
 	    });
-	console.log(currentLatLng.lat, currentLatLng.lng);
+/* 	console.log(currentLatLng.lat, currentLatLng.lng);
 	geocodeLatLng(geocoder, map);
+	request.location = currentLatLng;
+	service.nearbySearch(request, callback); */
 	/* document.getElementById('submit').addEventListener('click', function() {
 			geocodeLatLng(geocoder, map);
 			
 			}); */
-
+			
 }
+
+$(document).ready(function(){
+	$('.searchResult__header_tab_information').on("click", googleSearchInformation); 
+	$('.searchResult__header_tab_images').on("click", googleSearchImages);
+	$('.searchResult__header_tab_video').on("click", youtubeSearchVideo); 
+});
 
 function expandMap(){
 	if(isAnimationInProgress) return;
@@ -150,7 +193,10 @@ function geocodeLatLng(geocoder, map) {
 			}	
 			console.log(address);
 			console.log(map.zoom);
-			searchYouTubeApi();			
+			/* searchGCSE(); */
+			
+			googleSearchInformation();
+					
 		}
 		else {
 			console.log('Geocoder failed due to: ' + status);
@@ -160,7 +206,6 @@ function geocodeLatLng(geocoder, map) {
 
 var nextPageToken, prevPageToken;
 var firstPage=true; 
-
  // Helper function to display JavaScript value on HTML page.
 function showResponse(response) {	
     var responseString = JSON.stringify(response, '', 2);
@@ -204,12 +249,12 @@ function Video (item, idTag){
 	v.channelTitle			=item.snippet.channelTitle;
 	v.liveBroadcastContent	=item.snippet.liveBroadcastContent;
 	v.videoID				=item.id.videoId;
-	v.videoURL				="http://www.youtube.com/embed/" + v.videoID + "?autoplay=1";
+	v.videoURL				="//www.youtube.com/embed/" + v.videoID + "?autoplay=1";
 	console.log(v.title);
 	
 	//print the stored variables in a div idTag element
 	v.showInfo = function(){
-		$(idTag).append("<div class=\"response__video\"><div class=\"response__video_thumbnail\"><a id=\"response__video_thumbnail_"+v.videoID +"\" href='http://www.youtube.com/watch?v="+v.videoID+"'><img src=\""+v.thumbnails_medium+"\"/></a></div><div id=\"response__video_title\"><h3>"+v.title+"</h3></div><div id=\"response__video_channel\">"+v.channelTitle+"</div></div>"); 
+		$(idTag).append("<div class=\"response__video\"><div class=\"response__video_thumbnail\"><a id=\"response__video_thumbnail_"+v.videoID +"\" href='www.youtube.com/watch?v="+v.videoID+"'><img src=\""+v.thumbnails_medium+"\"/></a></div><div id=\"response__video_title\"><h3>"+v.title+"</h3></div><div id=\"response__video_channel\">"+v.channelTitle+"</div></div>"); 
 		
 		$("#response__video_thumbnail_" + v.videoID).click(v.playVideo); 
 	}
@@ -251,8 +296,16 @@ function onYouTubeApiLoad() {
     gapi.client.setApiKey('AIzaSyAZsHM9KOhcIx3wBMx9d51ceekkaTxltQk');  
 }
 
+function youtubeSearchVideo(){
+	$(".searchResult__results_info").css("display", "none");
+	$(".searchResult__results_images").css("display", "none");
+	$(".searchResult__results_video").css("display", "block");
+	searchYouTubeApi();
+}
+
 function searchYouTubeApi(pageToken) {
     // Use the JavaScript client library to create a search.list() API call.
+	
 	$("#response").html("");
 	var requestOptions = {
 		q: address,
@@ -268,5 +321,80 @@ function searchYouTubeApi(pageToken) {
 
 // Called automatically with the response of the YouTube API request.
 function onSearchResponse(response) {
+	
     showResponse(response);
+	
+}
+
+var s = "";	
+/* function hndlr(response) {
+
+    }
+ */
+	
+function googleSearchInformation(){
+	$(".searchResult__results_info").css("display", "block");
+	$(".searchResult__results_images").css("display", "none");
+	$(".searchResult__results_video").css("display", "none");
+	
+	googleSearchString = address;
+	googleSearchString.replace(" ","+");
+ 	$.get( "https://www.googleapis.com/customsearch/v1?key=AIzaSyARpX6PpI6Q3GvvAORTRV3ktRZT1h2M9JU&cx=009405490577163904846:fpuq3tzttf8&q="
+	+googleSearchString+"&filter=1&num=5", function( response ) {
+		  
+		for (var i = 0; i < response.items.length; i++) {
+			var item = response.items[i];
+	 
+			s += "<div class=\'results__item\'><h3><a href=\'" + item.link + "\'>"+ item.title +"</a></h3>"
+				+"<div class=\'anchor\'>" + item.displayLink + "</div>" + "<div class=\'snippet\'>" + item.snippet + "</div></div>";
+		}
+		$( "#results_info" ).html(s); 
+	});  
+	s="";
+}
+
+function googleSearchImages(){
+	$(".searchResult__results_images").css("display", "block");
+	$(".searchResult__results_info").css("display", "none");
+	$(".searchResult__results_video").css("display", "none");
+	googleSearchString = address;
+	googleSearchString.replace(" ","+");
+
+	$.get( "https://www.googleapis.com/customsearch/v1?key=AIzaSyARpX6PpI6Q3GvvAORTRV3ktRZT1h2M9JU&cx=009405490577163904846:fpuq3tzttf8&q="
+	+googleSearchString+"&filter=1&num=5&searchType=image", function( response ) {
+		  
+		for (var i = 0; i < response.items.length; i++) {
+			var item = response.items[i];
+	 
+			s += "<div class=\'results__item_img\'><a href=" + item.image.contextLink + "><img id=\'" + i + "\'src=\'" + item.link + "\'></img></a></div>";  
+		}
+		$( "#results_images" ).html(s);
+		for (var i = 0; i < response.items.length; i++) {
+			imageResize(i, response.items[i].image.height, response.items[i].image.width);
+		}
+	});
+	s="";
+}
+
+function imageResize(imgId, height, width){
+	
+	var img = document.getElementById(imgId); 
+	console.log(img);
+	console.log(imgId, width, height);
+	var ratio = 0;
+	var maxWidth = 300;
+	var maxHeight = 200;
+
+	if ( width > maxWidth ) {
+		ratio = maxWidth / width;
+		$(img).css( "width", maxWidth );
+		$(img).css( "height", height * ratio );
+	}
+
+	if ( height > maxHeight ) {
+		ratio = maxHeight / height;
+		$(img).css( "height", maxHeight );
+		$(img).css( "width", width * ratio );
+	}
+
 }

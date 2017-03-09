@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="scripts/script.js"></script>
 		
 		<script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
+		<!-- <script src="https://www.googleapis.com/customsearch/v1?key=AIzaSyARpX6PpI6Q3GvvAORTRV3ktRZT1h2M9JU&cx=009405490577163904846:fpuq3tzttf8&q=lectures&filter=1&num=5&callback=hndlr" type="text/javascript"></script> -->
 	</head>
 	<body onload="initMap()">
 		<div class="container">
@@ -44,8 +45,6 @@
 										</li>
 									</ul>
 								</div>
-								
-
 							</div>
 						</div>
 					</div>
@@ -71,20 +70,29 @@
 							<section class="searchblock">
 								<div id="searchQuery"></div> 
 								<div class="searchResult">
-									<div class="searchResult__video">
-										<pre id="response"></pre>
-										<div id="search">
-											<div class="pagination">
-												<button type="button" id="prevPageButton" class="page__button" onclick="previousPage();"><</button>
-												<button type="button" id="nextPageButton" class="page__button" onclick="nextPage();">></button></button>
+									<div class="searchResult__header">
+										<div class="searchResult__header_tab searchResult__header_tab_information"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_images"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_video"></div>
+									</div>
+									<div class="searchResult__results">
+										<div class="searchResult__results_info" id="results_info"></div>
+										<div class="searchResult__results_images" id="results_images"></div>
+										<div class="searchResult__results_video" id="results_video">
+											<pre id="response"></pre>
+											<div id="search">
+												<div class="pagination">
+													<button type="button" id="prevPageButton" class="page__button" onclick="previousPage();"><</button>
+													<button type="button" id="nextPageButton" class="page__button" onclick="nextPage();">></button></button>
+												</div>
 											</div>
-										</div>
-										<div class="searchResult__video_player">
-											<div id="overlay"></div>
-											<div id="videoContainer">
-												<iframe id="videoPlayer"  width="420" height="345"
-												src="">
-												</iframe>
+											<div class="searchResult__video_player">
+												<div id="overlay"></div>
+												<div id="videoContainer">
+													<iframe id="videoPlayer"  width="420" height="345"
+													src="">
+													</iframe>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -92,6 +100,7 @@
 							</section>
 						</div>
 					</div>
+					<div id="aaa" class="video__tab"></div>
 				</main>
 			</div>
 		</div>
