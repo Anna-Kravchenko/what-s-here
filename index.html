@@ -7,14 +7,15 @@
 		<link rel="stylesheet" href="css/style.css">
 		<script src="scripts/jquery-3.1.1.min.js"></script>
 		
- 		<!-- <script src="https://www.googleapis.com/youtube/v3/search"></script>  -->
-		
-		<script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmU5hYWv7rBrKgpt7murOG75W0H1cS7Og&callback=initMap&region=UA&language=ru&libraries=places"></script>
+		<script type="text/javascript" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmU5hYWv7rBrKgpt7murOG75W0H1cS7Og&callback=initMap&region=UA&language=ru&libraries=places&v=3"></script>
 		
 		<script type="text/javascript" src="scripts/script.js"></script>
+		<script type="text/javascript" src="scripts/map.js"></script>
+		<script type="text/javascript" src="scripts/youtube.js"></script>
+		<script type="text/javascript" src="scripts/googlesearch.js"></script>
+		<script type="text/javascript" src="scripts/googleplaces.js"></script>
 		
 		<script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
-		<!-- <script src="https://www.googleapis.com/customsearch/v1?key=AIzaSyARpX6PpI6Q3GvvAORTRV3ktRZT1h2M9JU&cx=009405490577163904846:fpuq3tzttf8&q=lectures&filter=1&num=5&callback=hndlr" type="text/javascript"></script> -->
 	</head>
 	<body onload="initMap()">
 		<div class="container">
@@ -31,7 +32,7 @@
 						<div class="header__info">
 							<div class="info">
 								<div class="info__title">what's here</div>
-								<div class="info__search"></div>
+								<div class="info__search">drop pin into the map and see info about this place</div>
 								<div class="info__socials">
 									<ul class="socials">
 										<li class="socials__item">
@@ -71,9 +72,10 @@
 								<div id="searchQuery"></div> 
 								<div class="searchResult">
 									<div class="searchResult__header">
-										<div class="searchResult__header_tab searchResult__header_tab_information"></div>
-										<div class="searchResult__header_tab searchResult__header_tab_images"></div>
-										<div class="searchResult__header_tab searchResult__header_tab_video"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_information" title="Google search"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_images" title="photo search"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_video" title="video search"></div>
+										<div class="searchResult__header_tab searchResult__header_tab_places" title="places search"></div>
 									</div>
 									<div class="searchResult__results">
 										<div class="searchResult__results_info" id="results_info"></div>
@@ -93,6 +95,13 @@
 													src="">
 													</iframe>
 												</div>
+											</div>
+										</div>
+												<div id="overlay1"></div>
+										<div class="searchResult__results_places" id="results_places">
+											<div class="searchResult__results_placeDetails">
+											</div>
+											<div id="reviewsList">
 											</div>
 										</div>
 									</div>
